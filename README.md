@@ -14,6 +14,10 @@ Install with:
 
     go get github.com/nickdavies/go-ratelimit/ratelimit
 
+Go Docs are at:
+
+    http://godoc.org/github.com/nickdavies/go-ratelimit/ratelimit
+
 Example:
 
 ```go
