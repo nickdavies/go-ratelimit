@@ -11,11 +11,12 @@ type RateLimiter interface {
     Event() (err error)
 }
 
-func NewRateLimiter(limit int, panic_on_limit bool) RateLimiter {
+func New(limit int, interval time.Duration, panic_on_limit bool) RateLimiter {
     er := &rateLimit{
         events: make(chan interface{}, limit),
         current: 0,
         limit: limit,
+        interval: interval,
         panic_on_limit: panic_on_limit,
     }
     go er.drain()
@@ -29,6 +30,7 @@ type rateLimit struct {
     events chan interface{}
     current int
     limit int
+    interval time.Duration
     panic_on_limit bool
 }
 
@@ -45,7 +47,7 @@ func (e *rateLimit) Event() (err error) {
 }
 
 func (e *rateLimit) drain() {
-    for _ = range time.Tick(time.Second / time.Duration(e.limit)) {
+    for _ = range time.Tick(e.interval / time.Duration(e.limit)) {
         select {
         case <-e.events:
             continue
