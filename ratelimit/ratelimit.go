@@ -14,7 +14,6 @@ type RateLimiter interface {
 func New(limit int, interval time.Duration, panic_on_limit bool) RateLimiter {
     er := &rateLimit{
         events: make(chan interface{}, limit),
-        current: 0,
         limit: limit,
         interval: interval,
         panic_on_limit: panic_on_limit,
@@ -28,7 +27,6 @@ func New(limit int, interval time.Duration, panic_on_limit bool) RateLimiter {
 
 type rateLimit struct {
     events chan interface{}
-    current int
     limit int
     interval time.Duration
     panic_on_limit bool
